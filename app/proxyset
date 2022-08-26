@@ -1,0 +1,27 @@
+#! /bin/bash
+. /etc/proxyset.conf
+
+if [[ -z "${SERVER_IP}" ]]; then
+    echo "SERVER_IP is not provided"
+    exit 1
+    fi
+if [[ -z "${TUNNEL_PORT}" ]]; then
+    echo "TUNNEL_PORT is not provided"
+    TUNNEL_PORT=8050
+    fi
+
+if [[ -z "${SERVER_PRIVATE_KEY}" ]]; then
+    echo "SERVER_PRIVATE_KEY is not provided"
+    SERVER_PRIVATE_KEY=~/.ssh/id_rsa
+    fi
+
+if [[ -z "${SERVER_PORT}" ]]; then
+    echo "SERVER_PORT is not provided"
+    SERVER_PORT=22
+    fi
+if [[ -z "${SSH_USER}" ]]; then
+    echo "SSH_USER is not provided"
+    SSH_USER=ubuntu
+    fi
+
+ssh -CqN $SSH_USER@$SERVER_IP -p  $SERVER_PORT -D $TUNNEL_PORT -i $SERVER_PRIVATE_KEY -o "StrictHostKeyChecking=no"
